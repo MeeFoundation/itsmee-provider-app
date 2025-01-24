@@ -88,8 +88,10 @@ import Header from "@components/Header.astro";
 
 <script>
   import { HashRouter } from "mee-components";
+  import { checkProvider } from "@utils/common";
   import type { ProviderApp } from "@utils/types";
   const initAppItem = async () => {
+    checkProvider();
     const appName = document.getElementById(
       "app-name"
     ) as HTMLDivElement | null;
@@ -115,7 +117,7 @@ import Header from "@components/Header.astro";
       window.location.hash = "apps";
     });
     const id = document.documentElement.dataset.appsId;
-    console.log("appsId", id);
+
     if (id != "") {
       const response = await fetch("/apps.json");
 

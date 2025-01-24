@@ -1,13 +1,44 @@
 ---
-import { Button, Input } from "mee-components";
+import { Button, ButtonLink, Input, Loading } from "mee-components";
 import Header from "@components/Header.astro";
+import MeeGuy from "@components/MeeGuy.astro";
 ---
 
 <>
   <Header />
   <main class="flex h-full min-h-screen pt-24">
+    <Loading />
     <article
-      class="flex h-full w-full max-w-480 flex-1 flex-col items-start justify-start gap-6 p-6"
+      class="hidden h-full w-full flex-1 items-center justify-center"
+      id="empty-app-list"
+    >
+      <section
+        class="flex max-w-screen-sm flex-col items-center justify-center gap-8 px-4"
+      >
+        <div><MeeGuy /></div>
+        <div class="flex flex-col gap-2">
+          <div
+            class="text-center text-4xl font-semibold tracking-0.02 text-gray-800"
+          >
+            You have no apps yet
+          </div>
+          <div
+            class="max-w-93.5 text-center text-lg font-normal tracking-0.02 text-gray-800"
+          >
+            Please add your apps and allow users to privately use them with Mee
+          </div>
+        </div>
+        <ButtonLink
+          href="/#create-app"
+          type="button"
+          className="w-auto px-4"
+          leftIcon="plus">New app</ButtonLink
+        >
+      </section>
+    </article>
+    <article
+      class="hidden h-full w-full max-w-480 flex-1 flex-col items-start justify-start gap-6 p-6"
+      id="app-list"
     >
       <div
         class="flex w-full flex-wrap justify-between gap-6 text-base font-semibold"
@@ -63,7 +94,11 @@ import Header from "@components/Header.astro";
 <script>
   import { HashRouter } from "mee-components";
   import type { ProviderApp } from "@utils/types";
+  import { checkProvider } from "@utils/common";
   const initApps = async () => {
+    checkProvider();
+    const emptyAppList = document.getElementById("empty-app-list");
+    const appList = document.getElementById("app-list");
     const newAppButton = document.getElementById("new-app");
     const filterButton = document.getElementById("filter");
     const appsContainer = document.getElementById("apps-container");
@@ -131,6 +166,16 @@ import Header from "@components/Header.astro";
 
     const data: ProviderApp[] = await response.json();
     loading?.classList.add("hidden");
+    if (data) {
+      emptyAppList?.classList.add("hidden");
+      appList?.classList.remove("hidden");
+      appList?.classList.add("flex");
+    } else {
+      appList?.classList.add("hidden");
+      emptyAppList?.classList.remove("hidden");
+      emptyAppList?.classList.add("flex");
+    }
+
     appendApps(data);
 
     const filterApps = () => {

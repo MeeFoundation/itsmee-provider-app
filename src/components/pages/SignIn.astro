@@ -93,14 +93,10 @@ import {
 
 <script>
   import config from "@config";
-  import { getCookie } from "@utils/cookie";
   import { HashRouter } from "mee-components";
-
+  import { checkProvider } from "@utils/common";
   const initSignIn = () => {
-    const user = getCookie("user");
-    if (user) {
-      window.location.hash = "";
-    }
+    checkProvider(true);
     const signInEmailForm = document.getElementById(
       "sign-in-email-form"
     ) as HTMLFormElement | null;

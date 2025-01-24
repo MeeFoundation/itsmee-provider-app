@@ -33,11 +33,17 @@ import { Button } from "mee-components";
 </main>
 
 <script>
-  import { HashRouter } from "mee-components";
+  import { HashRouter, Cookie } from "mee-components";
+  import { checkProvider } from "@utils/common";
   const initListener = () => {
+    checkProvider();
+    const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
+    if (agreementConfirmed) {
+      window.location.hash = "";
+    }
     const openLicenseButton = document.getElementById("open-license");
     openLicenseButton?.addEventListener("click", () => {
-      window.location.href = "/";
+      window.location.hash = "";
     });
   };
 

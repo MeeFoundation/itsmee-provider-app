@@ -9,7 +9,6 @@ import RestorePassword from "@components/pages/RestorePassword.astro";
 import ForgotPassword from "@components/pages/ForgotPassword.astro";
 import CreateApp from "@components/pages/CreateApp.astro";
 import DeclinedLicense from "@components/pages/DeclinedLicense.astro";
-import NewApp from "@components/pages/NewApp.astro";
 import NotFound from "@components/pages/NotFound.astro";
 import { Route } from "mee-components";
 ---
@@ -26,7 +25,7 @@ import { Route } from "mee-components";
     withoutDarkTheme={true}><AppsItem /></Route
   >
   <Route id="sign-up" route="sign-up" withoutDarkTheme={true}><SignUp /></Route>
-  <Route id="sign-up" route="sign-up" withoutDarkTheme={true}><SignUp /></Route>
+  <Route id="sign-in" route="sign-in" withoutDarkTheme={true}><SignIn /></Route>
   <Route id="declined-license" route="declined-license" withoutDarkTheme={true}><DeclinedLicense /></Route>
   <Route id="restore-password" route="restore-password" withoutDarkTheme={true}
     ><RestorePassword /></Route
@@ -34,7 +33,6 @@ import { Route } from "mee-components";
   <Route id="forgot-password" route="forgot-password" withoutDarkTheme={true}
     ><ForgotPassword /></Route
   >
-  <Route id="new-app" route="new-app" withoutDarkTheme={true}><NewApp /></Route>
   <Route id="create-app" route="create-app" withoutDarkTheme={true}
     ><CreateApp /></Route
   >

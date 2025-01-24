@@ -146,66 +146,69 @@ const { activePage, logoColor = "blue" } = Astro.props;
 
 <script>
   import { AvatarHelper } from "mee-components";
-  const menuToggle = document.getElementById("menu-toggle");
-  const profile = document.getElementById("profile");
-  let isProfileModalOpened = false;
-  const profileModal = document.getElementById("profile-modal");
-  const profileName = document.getElementById("profile-name");
-  const openProfileModal = document.getElementById("open-profile-modal");
-  const menu = document.getElementById("menu");
-  const navbar = document.getElementById("navbar");
-  const onButtonClick = () => {
-    if (navbar?.classList.contains("hidden")) {
-      navbar?.classList.remove("hidden");
-    } else {
-      navbar?.classList.add("hidden");
-    }
-  };
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest("#profile-modal") && isProfileModalOpened) {
+  const initHeader = async () => {
+    const menuToggle = document.getElementById("menu-toggle");
+    const profile = document.getElementById("profile");
+    let isProfileModalOpened = false;
+    const profileModal = document.getElementById("profile-modal");
+    const profileName = document.getElementById("profile-name");
+    const openProfileModal = document.getElementById("open-profile-modal");
+    const menu = document.getElementById("menu");
+    const navbar = document.getElementById("navbar");
+    const onButtonClick = () => {
+      if (navbar?.classList.contains("hidden")) {
+        navbar?.classList.remove("hidden");
+      } else {
+        navbar?.classList.add("hidden");
+      }
+    };
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("#profile-modal") && isProfileModalOpened) {
+        toggleProfile();
+      }
+    });
+    menuToggle?.addEventListener("click", onButtonClick);
+    const toggleProfile = () => {
+      if (isProfileModalOpened) {
+        openProfileModal && delete openProfileModal.dataset.active;
+
+        profileModal?.classList.remove("flex");
+        profileModal?.classList.add("hidden");
+      } else {
+        openProfileModal && (openProfileModal.dataset.active = "true");
+        profileModal?.classList.remove("hidden");
+        profileModal?.classList.add("flex");
+      }
+
+      isProfileModalOpened = !isProfileModalOpened;
+    };
+    openProfileModal?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       toggleProfile();
-    }
-  });
-  menuToggle?.addEventListener("click", onButtonClick);
-  const toggleProfile = () => {
-    if (isProfileModalOpened) {
-      openProfileModal && delete openProfileModal.dataset.active;
+    });
+    const response = await fetch("https://randomuser.me/api");
+    const data = await response.json();
 
-      profileModal?.classList.remove("flex");
-      profileModal?.classList.add("hidden");
-    } else {
-      openProfileModal && (openProfileModal.dataset.active = "true");
-      profileModal?.classList.remove("hidden");
-      profileModal?.classList.add("flex");
+    const randomUser = data.results[0];
+    if (randomUser) {
+      profile?.classList.remove("hidden");
+      menu?.classList.add("hidden");
+      if (profileName) {
+        profileName.innerHTML = randomUser.email;
+      }
+      AvatarHelper.setAvatar(
+        "profile-image-preview",
+        `${randomUser.name.first} ${randomUser.name.last}`,
+        randomUser.picture.medium
+      );
+      AvatarHelper.setAvatar(
+        "profile-image",
+        `${randomUser.name.first} ${randomUser.name.last}`,
+        randomUser.picture.medium
+      );
     }
-
-    isProfileModalOpened = !isProfileModalOpened;
   };
-  openProfileModal?.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleProfile();
-  });
-  const response = await fetch("https://randomuser.me/api");
-  const data = await response.json();
- 
-  const randomUser = data.results[0];
-  if (randomUser) {
-    profile?.classList.remove("hidden");
-    menu?.classList.add("hidden");
-    if (profileName) {
-      profileName.innerHTML = randomUser.email;
-    }
-    AvatarHelper.setAvatar(
-      "profile-image-preview",
-      `${randomUser.name.first} ${randomUser.name.last}`,
-      randomUser.picture.medium,
-    );
-    AvatarHelper.setAvatar(
-      "profile-image",
-      `${randomUser.name.first} ${randomUser.name.last}`,
-      randomUser.picture.medium,
-    );
-  }
+  initHeader();
 </script>
