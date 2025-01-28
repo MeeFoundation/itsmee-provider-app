@@ -1,11 +1,11 @@
 ---
-import Header from "@components/Header.astro";
 import MeeGuyDeclined from "@components/MeeGuyDeclined.astro";
+import PageHeader from "@components/PageHeader.astro";
 import { Button } from "mee-components";
 ---
 
-<Header />
-<main class="flex h-full min-h-screen items-center pt-28">
+<PageHeader />
+<main class="flex h-full min-h-screen items-center pt-27">
   <article class="flex h-full w-full flex-1 items-center justify-center">
     <section
       class="flex max-w-screen-sm flex-col items-center justify-center gap-8 px-4"
@@ -34,17 +34,19 @@ import { Button } from "mee-components";
 
 <script>
   import { HashRouter, Cookie } from "mee-components";
-  import { checkProvider } from "@utils/common";
+  import { checkProvider, initHeader } from "@utils/common";
   const initListener = () => {
-    checkProvider();
-    const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
-    if (agreementConfirmed) {
-      window.location.hash = "";
+    if (checkProvider()) {
+      initHeader();
+      const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
+      if (agreementConfirmed) {
+        window.location.hash = "";
+      }
+      const openLicenseButton = document.getElementById("open-license");
+      openLicenseButton?.addEventListener("click", () => {
+        window.location.hash = "";
+      });
     }
-    const openLicenseButton = document.getElementById("open-license");
-    openLicenseButton?.addEventListener("click", () => {
-      window.location.hash = "";
-    });
   };
 
   HashRouter.initPageListeners(

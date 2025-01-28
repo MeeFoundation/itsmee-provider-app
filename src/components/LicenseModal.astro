@@ -165,8 +165,6 @@ import MeeGuy from "./MeeGuy.astro";
         window.location.hash = "apps";
       });
       (licenseModal as HTMLDialogElement)?.showModal();
-    } else {
-      window.location.hash = "apps";
     }
   };
   document.addEventListener("change-route", initLicenseModals);
