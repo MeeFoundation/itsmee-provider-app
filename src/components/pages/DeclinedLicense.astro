@@ -1,10 +1,8 @@
 ---
 import MeeGuyDeclined from "@components/MeeGuyDeclined.astro";
-import PageHeader from "@components/PageHeader.astro";
 import { Button } from "mee-components";
 ---
 
-<PageHeader />
 <main class="flex h-full min-h-screen items-center pt-27">
   <article class="flex h-full w-full flex-1 items-center justify-center">
     <section
@@ -34,10 +32,9 @@ import { Button } from "mee-components";
 
 <script>
   import { HashRouter, Cookie } from "mee-components";
-  import { checkProvider, initHeader } from "@utils/common";
+  import { checkProvider } from "@utils/common";
   const initListener = () => {
     if (checkProvider()) {
-      initHeader();
       const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
       if (agreementConfirmed) {
         window.location.hash = "";

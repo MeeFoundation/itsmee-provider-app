@@ -1,200 +1,210 @@
 ---
-import { Button, ButtonLink, Input, Loading, Header } from "mee-components";
-import PageHeader from "@components/PageHeader.astro";
+import { Button, ButtonLink, Input, Loading } from "mee-components";
 import MeeGuy from "@components/MeeGuy.astro";
 ---
 
-<>
-  <PageHeader />
-  <main class="flex h-full min-h-screen pt-27">
-    <Loading />
-    <article
-      class="hidden h-full w-full flex-1 items-center justify-center"
-      id="empty-app-list"
+<main class="flex h-full min-h-screen pt-27">
+  <Loading />
+  <article
+    class="hidden h-full w-full flex-1 items-center justify-center"
+    id="empty-app-list"
+  >
+    <section
+      class="flex max-w-screen-sm flex-col items-center justify-center gap-8 px-6"
     >
-      <section
-        class="flex max-w-screen-sm flex-col items-center justify-center gap-8 px-6"
-      >
-        <div><MeeGuy /></div>
-        <div class="flex flex-col gap-2">
-          <div
-            class="text-center text-4xl font-semibold tracking-0.02 text-gray-800"
-          >
-            You have no apps yet
-          </div>
-          <div
-            class="max-w-93.5 text-center text-lg font-normal tracking-0.02 text-gray-800"
-          >
-            Please add your apps and allow users to privately use them with Mee
-          </div>
-        </div>
-        <ButtonLink
-          href="/#create-app"
-          type="button"
-          className="w-auto px-4"
-          leftIcon="plus">New app</ButtonLink
+      <div><MeeGuy /></div>
+      <div class="flex flex-col gap-2">
+        <div
+          class="text-center text-4xl font-semibold tracking-0.02 text-gray-800"
         >
-      </section>
-    </article>
-    <article
-      class="hidden h-full w-full max-w-480 flex-1 flex-col items-start justify-start gap-6 p-6"
-      id="app-list"
-    >
-      <div
-        class="flex w-full flex-wrap justify-between gap-6 text-base font-semibold"
-      >
-        <div class="flex flex-wrap gap-4">
-          <Input
-            id="search"
-            label="Search apps"
-            size="md"
-            className="!w-80"
-            labelPosition="inside"
-            autocomplete="off"
-            leftIcon="search"
-            required
-          />
-          <div>
-            <Button
-              id="filter"
-              type="button"
-              buttonType="primary"
-              style="outlined"
-              size="l"
-              className="h-12 w-64">Filter</Button
-            >
-          </div>
+          You have no apps yet
         </div>
+        <div
+          class="max-w-93.5 text-center text-lg font-normal tracking-0.02 text-gray-800"
+        >
+          Please add your apps and allow users to privately use them with Mee
+        </div>
+      </div>
+      <ButtonLink
+        href="/#create-app"
+        type="button"
+        className="w-auto px-4"
+        leftIcon="plus">New app</ButtonLink
+      >
+    </section>
+  </article>
+  <article
+    class="hidden h-full w-full max-w-480 flex-1 flex-col items-start justify-start gap-6 p-6"
+    id="app-list"
+  >
+    <div
+      class="flex w-full flex-wrap justify-between gap-6 text-base font-semibold"
+    >
+      <div class="flex flex-wrap gap-4">
+        <Input
+          id="search"
+          label="Search apps"
+          size="md"
+          className="!w-80"
+          labelPosition="inside"
+          autocomplete="off"
+          leftIcon="search"
+          required
+        />
         <div>
-          <Button id="new-app" type="button" className="w-auto px-4"
-            ><span class="mr-4 text-4xl font-thin">+</span>New app</Button
+          <Button
+            id="filter"
+            type="button"
+            buttonType="primary"
+            style="outlined"
+            size="l"
+            className="h-12 w-64">Filter</Button
           >
         </div>
       </div>
-      <section
-        class="flex w-full flex-col items-start rounded-xl border border-solid border-gray-300 bg-white text-gray-800"
-        id="apps-container"
-      >
-      </section>
-    </article>
-  </main>
-  <div class="hidden">
-    <div id="edit-icon" class="cursor-pointer">
-      <i class="bi bi-pencil text-2xl text-brand-700"></i>
+      <div>
+        <Button id="new-app" type="button" className="w-auto px-4"
+          ><span class="mr-4 text-4xl font-thin">+</span>New app</Button
+        >
+      </div>
     </div>
-    <div id="delete-icon" class="cursor-pointer">
-      <i class="bi bi-trash text-2xl text-red-700"></i>
-    </div>
-    <div id="link-icon" class="cursor-pointer">
-      <i class="bi bi-link-45deg text-lg text-gray-800"></i>
-    </div>
+    <section
+      class="flex w-full flex-col items-start rounded-xl border border-solid border-gray-300 bg-white text-gray-800"
+      id="apps-container"
+    >
+    </section>
+  </article>
+</main>
+<div class="hidden">
+  <div id="edit-icon" class="cursor-pointer">
+    <i class="bi bi-pencil text-2xl text-brand-700"></i>
   </div>
-</>
-
+  <div id="delete-icon" class="cursor-pointer">
+    <i class="bi bi-trash text-2xl text-red-700"></i>
+  </div>
+  <div id="link-icon" class="cursor-pointer">
+    <i class="bi bi-link-45deg text-lg text-gray-800"></i>
+  </div>
+</div>
 <script>
   import { HashRouter } from "mee-components";
   import type { ProviderApp } from "@utils/types";
-  import { checkProvider, initHeader } from "@utils/common";
+  import { checkProvider } from "@utils/common";
+  import { getProviderApps } from "@api/api";
+  import {
+    getProviderAppsData,
+    setProviderAppsData,
+    subscribeProviderAppsData,
+  } from "@store/ProviderAppsStore";
+
+  const filterApps = (apps?: ProviderApp[]) => {
+    const searchInput = document.getElementById(
+      "search"
+    ) as HTMLInputElement | null;
+    const filterValue = searchInput?.value;
+
+    if (filterValue) {
+      const filterData = apps?.filter((item) =>
+        item.name.toLowerCase().includes(filterValue.toLowerCase())
+      );
+      appendApps(filterData);
+    } else {
+      appendApps(apps);
+    }
+  };
+
+  const appendApps = (apps?: ProviderApp[]) => {
+    const appsContainer = document.getElementById("apps-container");
+    const editIcon = document.getElementById("edit-icon");
+    const deleteIcon = document.getElementById("delete-icon");
+    const linkIcon = document.getElementById("link-icon");
+    const emptyAppList = document.getElementById("empty-app-list");
+    const appList = document.getElementById("app-list");
+    const loading = document.getElementById("loading");
+
+    loading?.classList.add("hidden");
+
+    if (appsContainer && apps) {
+      emptyAppList?.classList.add("hidden");
+      appList?.classList.remove("hidden");
+      appList?.classList.add("flex");
+
+      appsContainer.innerHTML = "";
+      apps.forEach((app, i: number) => {
+        const appUrl = "apps/" + i;
+        const div = document.createElement("div");
+        div.className =
+          "flex w-full flex-row items-center justify-between gap-6 border-b border-solid border-b-gray-200 p-6 last:border-b-0";
+
+        const divName = document.createElement("div");
+
+        divName.className = "flex items-center gap-2";
+        const divTitle = document.createElement("div");
+        const divTitleContent = document.createTextNode(app.name);
+        divTitle.appendChild(divTitleContent);
+        const iconLink = linkIcon && linkIcon.cloneNode(true);
+        const buttonLink = document.createElement("button");
+        buttonLink.onclick = () => {
+          navigator.clipboard.writeText(app.url);
+        };
+        iconLink && buttonLink.appendChild(iconLink);
+        divName.appendChild(divTitle);
+        divName.appendChild(buttonLink);
+
+        const divActions = document.createElement("div");
+        divActions.className = "flex items-center gap-6";
+        const iconEdit = editIcon && editIcon.cloneNode(true);
+        const buttonEdit = document.createElement("button");
+        buttonEdit.onclick = () => {
+          window.location.hash = appUrl;
+        };
+        iconEdit && buttonEdit.appendChild(iconEdit);
+        const iconDelete = deleteIcon && deleteIcon.cloneNode(true);
+        const buttonDelete = document.createElement("button");
+        buttonDelete.onclick = () => {
+          console.log("delete App");
+        };
+        iconDelete && buttonDelete.appendChild(iconDelete);
+        divActions.appendChild(buttonEdit);
+        divActions.appendChild(buttonDelete);
+        div.appendChild(divName);
+        div.appendChild(divActions);
+
+        appsContainer.appendChild(div);
+      });
+    } else {
+      appList?.classList.add("hidden");
+      emptyAppList?.classList.remove("hidden");
+      emptyAppList?.classList.add("flex");
+    }
+  };
+
+  const subscribeProviderApps = async () => {
+    const filterButton = document.getElementById("filter");
+
+    const searchInput = document.getElementById(
+      "search"
+    ) as HTMLInputElement | null;
+    let appsData = getProviderAppsData();
+    if (!appsData) {
+      appsData = await getProviderApps();
+      setProviderAppsData(appsData);
+    }
+    appendApps(appsData);
+    subscribeProviderAppsData(appendApps);
+    filterButton?.addEventListener("click", () => filterApps(appsData));
+    searchInput?.addEventListener("change", () => filterApps(appsData));
+  };
 
   const initApps = async () => {
     if (checkProvider()) {
-      initHeader();
-      const emptyAppList = document.getElementById("empty-app-list");
-      const appList = document.getElementById("app-list");
       const newAppButton = document.getElementById("new-app");
-      const filterButton = document.getElementById("filter");
-      const appsContainer = document.getElementById("apps-container");
-      const editIcon = document.getElementById("edit-icon");
-      const deleteIcon = document.getElementById("delete-icon");
-      const linkIcon = document.getElementById("link-icon");
-      const searchInput = document.getElementById(
-        "search"
-      ) as HTMLInputElement | null;
+
       newAppButton?.addEventListener("click", () => {
         window.location.hash = "create-app";
       });
 
-      const appendApps = (apps: ProviderApp[]) => {
-        if (appsContainer && apps) {
-          appsContainer.innerHTML = "";
-          apps.forEach((app, i: number) => {
-            const appUrl = "apps/" + i;
-            const div = document.createElement("div");
-            div.className =
-              "flex w-full flex-row items-center justify-between gap-6 border-b border-solid border-b-gray-200 p-6 last:border-b-0";
-
-            const divName = document.createElement("div");
-
-            divName.className = "flex items-center gap-2";
-            const divTitle = document.createElement("div");
-            const divTitleContent = document.createTextNode(app.name);
-            divTitle.appendChild(divTitleContent);
-            const iconLink = linkIcon && linkIcon.cloneNode(true);
-            const buttonLink = document.createElement("button");
-            buttonLink.onclick = () => {
-              navigator.clipboard.writeText(app.url);
-            };
-            iconLink && buttonLink.appendChild(iconLink);
-            divName.appendChild(divTitle);
-            divName.appendChild(buttonLink);
-
-            const divActions = document.createElement("div");
-            divActions.className = "flex items-center gap-6";
-            const iconEdit = editIcon && editIcon.cloneNode(true);
-            const buttonEdit = document.createElement("button");
-            buttonEdit.onclick = () => {
-              window.location.hash = appUrl;
-            };
-            iconEdit && buttonEdit.appendChild(iconEdit);
-            const iconDelete = deleteIcon && deleteIcon.cloneNode(true);
-            const buttonDelete = document.createElement("button");
-            buttonDelete.onclick = () => {
-              console.log("delete App");
-            };
-            iconDelete && buttonDelete.appendChild(iconDelete);
-            divActions.appendChild(buttonEdit);
-            divActions.appendChild(buttonDelete);
-            div.appendChild(divName);
-            div.appendChild(divActions);
-
-            appsContainer.appendChild(div);
-          });
-        }
-      };
-
-      const loading = document.getElementById("loading");
-
-      const response = await fetch("/apps.json");
-
-      const data: ProviderApp[] = await response.json();
-      loading?.classList.add("hidden");
-      if (data) {
-        emptyAppList?.classList.add("hidden");
-        appList?.classList.remove("hidden");
-        appList?.classList.add("flex");
-      } else {
-        appList?.classList.add("hidden");
-        emptyAppList?.classList.remove("hidden");
-        emptyAppList?.classList.add("flex");
-      }
-
-      appendApps(data);
-
-      const filterApps = () => {
-        const filterValue = searchInput?.value;
-
-        if (filterValue) {
-          const filterData = data.filter((item) =>
-            item.name.toLowerCase().includes(filterValue.toLowerCase())
-          );
-          appendApps(filterData);
-        } else {
-          appendApps(data);
-        }
-      };
-
-      filterButton?.addEventListener("click", filterApps);
-      searchInput?.addEventListener("change", filterApps);
+      subscribeProviderApps();
     }
   };
   HashRouter.initPageListeners("apps", initApps, "Apps");

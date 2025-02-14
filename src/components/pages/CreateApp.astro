@@ -1,10 +1,8 @@
 ---
 import { Button, Input } from "mee-components";
-import PageHeader from "@components/PageHeader.astro";
 ---
 
-<PageHeader />
-<main class="pt-27 flex h-full w-full items-start justify-center">
+<main class="flex h-full w-full items-start justify-center pt-27">
   <article
     class="flex h-full w-full max-w-3xl flex-col items-start justify-start gap-6 p-6"
   >
@@ -80,11 +78,10 @@ import PageHeader from "@components/PageHeader.astro";
 
 <script>
   import { HashRouter } from "mee-components";
-  import { checkProvider, initHeader } from "@utils/common";
+  import { checkProvider } from "@utils/common";
 
   const initCreateCollection = () => {
     if (checkProvider()) {
-      initHeader();
       const saveAppButton = document.getElementById("save-app");
       saveAppButton?.addEventListener("click", () => {
         window.location.hash = "apps";

@@ -11,34 +11,48 @@ import CreateApp from "@components/pages/CreateApp.astro";
 import DeclinedLicense from "@components/pages/DeclinedLicense.astro";
 import NotFound from "@components/pages/NotFound.astro";
 import { Route } from "mee-components";
+import PageHeader from "@components/PageHeader.astro";
 ---
 
 <Layout title="Welcome to Mee">
+  <PageHeader />
   <div id="route-content"></div>
-  <Route id="index" route="" withoutDarkTheme={true}><IndexPage /></Route>
-  <Route id="apps" route="apps" withoutDarkTheme={true}><AppsList /></Route>
+  <Route id="index" route="" withoutDarkTheme isUserPage><IndexPage /></Route>
+  <Route id="apps" route="apps" withoutDarkTheme isUserPage><AppsList /></Route>
   <Route
     id="apps-item"
     route="^apps\/(\\d*)\\/?$"
-    regexRoute={true}
+    regexRoute
+    isUserPage
     params={["apps-id"]}
-    withoutDarkTheme={true}><AppsItem /></Route
+    withoutDarkTheme><AppsItem /></Route
   >
-  <Route id="sign-up" route="sign-up" withoutDarkTheme={true}><SignUp /></Route>
-  <Route id="sign-in" route="sign-in" withoutDarkTheme={true}><SignIn /></Route>
-  <Route id="declined-license" route="declined-license" withoutDarkTheme={true}><DeclinedLicense /></Route>
-  <Route id="restore-password" route="restore-password" withoutDarkTheme={true}
+  <Route id="sign-up" route="sign-up" withoutDarkTheme><SignUp /></Route>
+  <Route id="sign-in" route="sign-in" withoutDarkTheme><SignIn /></Route>
+  <Route
+    id="declined-license"
+    route="declined-license"
+    withoutDarkTheme
+    isUserPage><DeclinedLicense /></Route
+  >
+  <Route id="restore-password" route="restore-password" withoutDarkTheme
     ><RestorePassword /></Route
   >
-  <Route id="forgot-password" route="forgot-password" withoutDarkTheme={true}
+  <Route id="forgot-password" route="forgot-password" withoutDarkTheme
     ><ForgotPassword /></Route
   >
-  <Route id="create-app" route="create-app" withoutDarkTheme={true}
+  <Route id="create-app" route="create-app" withoutDarkTheme isUserPage
     ><CreateApp /></Route
   >
-  <Route id="not-found" route="404" withoutDarkTheme={true}><NotFound /></Route>
+  <Route id="not-found" route="404" withoutDarkTheme><NotFound /></Route>
 </Layout>
 <script>
+  import { getUser } from "@api/api";
   import { HashRouter } from "mee-components";
+  import { setUserData } from "@store/UserStore";
+  import initHeader from "@scripts/Header";
+  initHeader();
   HashRouter.initRouter();
+  const randomUser = await getUser();
+  setUserData(randomUser);
 </script>

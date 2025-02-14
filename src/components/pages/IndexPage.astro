@@ -1,19 +1,14 @@
 ---
-import Header from "@components/Header.astro";
 import LicenseModal from "@components/LicenseModal.astro";
 ---
 
-<>
-  <Header />
-  <LicenseModal />
-</>
+<LicenseModal />
 
 <script>
   import { HashRouter, Cookie } from "mee-components";
-  import { checkProvider, initHeader } from "@utils/common";
+  import { checkProvider } from "@utils/common";
   const initIndexPage = () => {
     if (checkProvider()) {
-      initHeader();
       const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
       if (agreementConfirmed) {
         window.location.hash = "apps";
