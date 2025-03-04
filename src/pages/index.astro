@@ -12,6 +12,8 @@ import DeclinedLicense from "@components/pages/DeclinedLicense.astro";
 import NotFound from "@components/pages/NotFound.astro";
 import { Route } from "mee-components";
 import PageHeader from "@components/PageHeader.astro";
+import LicensePage from "@components/pages/LicensePage.astro";
+import SignUpSoon from "@components/pages/SignUpSoon.astro";
 ---
 
 <Layout title="Welcome to Mee">
@@ -19,6 +21,7 @@ import PageHeader from "@components/PageHeader.astro";
   <div id="route-content"></div>
   <Route id="index" route="" withoutDarkTheme isUserPage><IndexPage /></Route>
   <Route id="apps" route="apps" withoutDarkTheme isUserPage><AppsList /></Route>
+  <Route id="license" route="license" withoutDarkTheme><LicensePage /></Route>
   <Route
     id="apps-item"
     route="^apps\/(\\d*)\\/?$"
@@ -28,6 +31,9 @@ import PageHeader from "@components/PageHeader.astro";
     withoutDarkTheme><AppsItem /></Route
   >
   <Route id="sign-up" route="sign-up" withoutDarkTheme><SignUp /></Route>
+  <Route id="sign-up-soon" route="sign-up-soon" withoutDarkTheme
+    ><SignUpSoon /></Route
+  >
   <Route id="sign-in" route="sign-in" withoutDarkTheme><SignIn /></Route>
   <Route
     id="declined-license"

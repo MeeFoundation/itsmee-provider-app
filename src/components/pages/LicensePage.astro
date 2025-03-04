@@ -1,0 +1,121 @@
+---
+import { Button, ButtonLink, Badge, UploadButton } from "mee-components";
+---
+
+<article
+  class="flex h-full w-full max-w-480 flex-1 flex-col items-start justify-start gap-6 p-6"
+  id="app-list"
+>
+  <div>
+    <div class="flex flex-col items-start">
+      <div
+        class="isolate flex h-[82vh] w-full flex-col items-start gap-10 overflow-y-scroll rounded-t-xl border border-solid border-grey-300 bg-white p-6 text-xl"
+      >
+        <div>
+          <div class="text-4xl font-semibold">Mee Data License</div>
+          <div class="text-3xl font-semibold leading-10">
+            Legal Agreement for Businesses
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold">In short</div>
+          <div>
+            The Mee data license defines what businesses can and can’t do with
+            user data.
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold">Questions or concerns?</div>
+          <div>
+            Reading this privacy notice will help you understand your privacy
+            rights and choices. If you do not agree with our policies and
+            practices, please do not use our Services. If you still have any
+            questions or concerns, please contact us at contact@meeproject.org.
+          </div>
+        </div>
+        <div class="font-semibold">Key points</div>
+        <div>
+          <div class="font-semibold">
+            Do we process any sensitive personal information?
+          </div>
+          <div>NO. We do not process any sensitive personal information.</div>
+        </div>
+        <div>
+          <div class="font-semibold">
+            Do we receive any information from third parties?
+          </div>
+          <div>NO. We don’t receive any information from third parties.</div>
+        </div>
+        <div>
+          <div class="font-semibold">How do we process your information?</div>
+          <div>We do not process any of your personal information.</div>
+        </div>
+        <div>
+          <div class="font-semibold">
+            In what situations and with which parties do we share personal
+            information?
+          </div>
+          <div>We do not process any of your personal information.</div>
+        </div>
+      </div>
+      <div
+        class="flex w-full flex-col-reverse items-center justify-between gap-4 rounded-b-xl border border-t-0 border-solid border-grey-300 bg-white p-6 md:flex-row"
+      >
+        <div>
+          <Badge
+            leftIcon="exclamation-triangle"
+            type="danger"
+            size="m"
+            style="light"
+            >Human Information License signature is required in order to become
+            a Mee provider.</Badge
+          >
+          <Badge
+            leftIcon="exclamation-triangle"
+            type="warning"
+            hidden
+            size="m"
+            style="light">Pending verification of handsigned HIL.</Badge
+          >
+          <Badge
+            leftIcon="exclamation-triangle"
+            type="warning"
+            hidden
+            size="m"
+            style="light">HIL successfully signed since Feb 22, 2023.</Badge
+          >
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <ButtonLink
+            buttonType="tertiary"
+            style="transparent"
+            href="mailto:contact@mee.foundation"
+            leftIcon="envelope !text-2xl">Contact Mee</ButtonLink
+          >
+          <Button
+            leftIcon="cloud-download"
+            buttonType="tertiary"
+            style="outlined">Download HIL</Button
+          >
+          <UploadButton
+            leftIcon="cloud-upload"
+            buttonType="tertiary"
+            accept="application/pdf"
+            style="outlined">Upload handsigned HIL</UploadButton
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  import { checkProvider } from "@utils/common";
+  import { HashRouter } from "mee-components";
+
+  const initSignUpSoon = () => {
+    checkProvider();
+  };
+
+  HashRouter.initPageListeners("license", initSignUpSoon, "License");
+</script>
