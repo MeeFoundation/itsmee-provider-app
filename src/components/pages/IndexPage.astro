@@ -8,7 +8,9 @@ import LicenseModal from "@components/LicenseModal.astro";
   import { HashRouter, Cookie } from "mee-components";
   import { checkProvider } from "@utils/common";
   const initIndexPage = () => {
-    if (checkProvider()) {
+    const checkProviderResult = checkProvider();
+    console.log("checkProviderResult", checkProviderResult);
+    if (checkProviderResult) {
       const agreementConfirmed = Cookie.getCookie("agreement-confirmed");
       if (agreementConfirmed) {
         window.location.hash = "apps";
